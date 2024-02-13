@@ -1,0 +1,22 @@
+Debug: false # Set to true for development
+
+# Mysql
+DatabaseHost: xxx.xxx.xxx.xxx
+DatabasePort: 3306
+DatabaseUser: xxx
+DatabasePassword: "xxxxxx"
+DatabaseName: dbcourse_dev
+
+# Object Storage
+S3SecretId: xxx
+S3SecretKey: xxxxxx
+S3Address: xxx.xxx.xxx.xxx:xxxx
+S3Bucket: database-project
+S3UseSSL: false
+
+# Django specific
+DjangoSecretKey: django-insecure-#+l4f$)bhg#f^@sq_d4l-f0a=96t_92@$tr(l4maw2kh@o-3+3
+
+# EMail
+EMailUser: "xxx@xxx.xx"
+EMailAuthCode: xxx

@@ -1,0 +1,40 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  stage: build
+  only:
+    - main
+  tags:
+    - machine002
+  script:
+    - echo "Building..."
+    - docker build -t "db_project:ci_job_$CI_PIPELINE_ID" .
+    - echo "Build complete!"
+
+test_main:
+  stage: test
+  only:
+    - main
+  tags:
+    - machine002
+  script:
+    - echo "Checking..."
+    - docker run --rm=true "db_project:ci_job_$CI_PIPELINE_ID" /bin/bash -c "cp config_example.yaml config.yaml && pylint --load-plugins pylint_django --django-settings-module=DBProject.settings ./trade"
+    - echo "Checking complete!"
+
+deploy_main:
+  stage: deploy
+  needs:
+    - test_main
+  only:
+    - main
+  tags:
+    - machine002
+  script:
+    - echo "Deploying..."
+    - docker stop db-project-main && docker rm db-project-main || true
+    - docker run --restart=unless-stopped --name=db-project-main -v /mnt/data/app-config/db_project_config.yaml:/app/config.yaml -d -p 8200:8000 "db_project:ci_job_$CI_PIPELINE_ID"
+    - echo "Deploying complete!"
